@@ -1,25 +1,53 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+// RHZ LAB / Instrument Console: asymmetric dashboard with tactile panels and creator-ready framework states.
+import { useState } from "react";
+import { toast } from "sonner";
+import { ArrowUpRight, ChevronRight, CircleHelp, Clock3, Code2, Search, Database, FilePlus2, Flag, Layers3, LockKeyhole, MoreHorizontal, Play, Plus, Radio, RotateCcw, Server, Settings2, Sparkles, Target, Terminal, Trophy, Users, Wifi } from "lucide-react";
 
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
- */
+const navToast = (label: string) => toast(`${label} akan tersedia setelah Creator Panel terhubung.`, { description: "UI framework sudah siap; konten tetap dikonfigurasi oleh admin." });
+
+function ProgressBar({ value, tone = "teal" }: { value: number; tone?: string }) { return <div className="progress-track"><div className={`progress-fill ${tone}`} style={{ width: `${value}%` }} /></div>; }
+function PanelTitle({ eyebrow, title, action }: { eyebrow: string; title: string; action?: string }) { return <div className="panel-title"><div><div className="eyebrow">{eyebrow}</div><h2>{title}</h2></div>{action && <button className="text-action" onClick={() => navToast(action)}>{action}<ArrowUpRight size={14} /></button>}</div>; }
+
 export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
+  const [labStatus, setLabStatus] = useState("OFFLINE");
+  const [activeTab, setActiveTab] = useState("overview");
+  const [isCreator, setIsCreator] = useState(false);
+  const [search, setSearch] = useState("");
+  const startLab = () => { setLabStatus("STARTING"); toast("Lab instance sedang disiapkan", { description: "Creator Panel akan menentukan target, ports, dan konfigurasi instance." }); setTimeout(() => setLabStatus("ONLINE"), 1100); };
+  const items = ["Web Fundamentals", "Linux Fundamentals", "Network Recon", "Identity & Access", "Defensive Security"].filter((x) => x.toLowerCase().includes(search.toLowerCase()));
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
+  return <div className="workspace" id="dashboard">
+    <section className="hero-strip">
+      <div className="hero-image" />
+      <div className="hero-copy"><div className="signal-line"><span className="live-dot" /> OPERATOR CONSOLE / 06:42:18 UTC</div><h1>Resume the<br /><em>signal.</em></h1><p>Progress is a trail. Your next practical step is waiting in the lab.</p><div className="hero-actions"><button className="primary-button" onClick={() => navToast("Resume learning")}><Play size={15} fill="currentColor" /> Resume learning</button><button className="secondary-button" onClick={() => navToast("Open skill tree")}>View skill tree <ChevronRight size={15} /></button></div></div>
+      <div className="hero-readout"><div className="readout-label">CURRENT STREAK</div><div className="readout-value">07 <small>DAYS</small></div><div className="readout-meter"><span>MON</span><i /><i /><i /><i className="on" /><i className="on" /><i className="on" /><i className="on" /><span>SUN</span></div><div className="readout-foot">+12% from last week</div></div>
+    </section>
+
+    <div className="workspace-grid">
+      <section className="panel panel-profile">
+        <PanelTitle eyebrow="Operator profile" title="alex.rhz" action="Edit profile" />
+        <div className="profile-grid"><div className="profile-avatar">AR<span className="avatar-ring" /></div><div className="profile-meta"><div className="rank-line"><span className="rank-chip">FIELD OPERATIVE</span><span className="mono muted">#004821</span></div><div className="level-row"><strong>Level 12</strong><span className="mono">2,840 / 3,600 XP</span></div><ProgressBar value={79} /></div></div>
+        <div className="stat-row"><div><span>CHALLENGES</span><strong>18</strong></div><div><span>ROOMS</span><strong>06</strong></div><div><span>LABS</span><strong>03</strong></div><div><span>SKILL SCORE</span><strong>742</strong></div></div>
+      </section>
+
+      <section className="panel continue-panel">
+        <div className="panel-topline"><div className="eyebrow">Continue learning</div><span className="status-tag amber"><Clock3 size={12} /> 18 MIN LEFT</span></div>
+        <div className="continue-content"><div className="path-icon"><Code2 size={22} /></div><div><h3>Web Exploitation <span>02 / 07</span></h3><p>Authentication surfaces <span className="dot-separator">•</span> Module 02</p><ProgressBar value={31} /></div></div>
+        <button className="primary-button full-button" onClick={() => navToast("Continue module")}>Continue module <ChevronRight size={15} /></button>
+      </section>
+
+      <section className="panel stats-panel"><PanelTitle eyebrow="Telemetry / personal progress" title="This cycle" action="View all stats" /><div className="telemetry-grid"><div className="telemetry-item"><span>XP EARNED</span><strong>1,280</strong><small className="up">↗ 14.2%</small></div><div className="telemetry-item"><span>SOLVE RATE</span><strong>68.4<small>%</small></strong><small className="up">↗ 6.8%</small></div><div className="telemetry-item"><span>AVG. SOLVE TIME</span><strong>24<small>m</small></strong><small className="down">↘ 3.1%</small></div><div className="telemetry-item"><span>HINTS USED</span><strong>04</strong><small className="muted">of 12 available</small></div></div><div className="mini-chart"><div className="chart-y"><span>600</span><span>400</span><span>200</span><span>0</span></div><div className="chart-bars">{[42,58,51,77,61,82,69,94,74,88,80,100].map((h, i) => <div key={i} className={`bar ${i === 11 ? "today" : ""}`} style={{ height: `${h}%` }}><i /></div>)}</div></div><div className="chart-labels"><span>01 AUG</span><span>08 AUG</span><span>15 AUG</span><span>TODAY</span></div></section>
+
+      <section className="panel path-panel" id="paths"><PanelTitle eyebrow="Learning paths" title="Your route map" action="Explore catalog" /><div className="filter-row"><div className="input-shell"><Search size={14} /><input placeholder="Filter paths..." value={search} onChange={(e) => setSearch(e.target.value)} /></div><span className="mono muted">05 ACTIVE</span></div><div className="path-list">{items.map((item, i) => <button className="path-item" key={item} onClick={() => navToast(item)}><span className={`path-index ${i < 2 ? "done" : ""}`}>{i < 2 ? "✓" : `0${i + 1}`}</span><span className="path-name"><strong>{item}</strong><small>{i < 2 ? "Module complete" : `${i + 1} modules configured`}</small></span><span className="path-percent">{[100, 100, 54, 24, 8][i] || 0}%</span><ChevronRight size={15} className="muted" /></button>)}</div></section>
+
+      <section className="panel lab-panel" id="labs"><div className="lab-header"><PanelTitle eyebrow="Lab environment" title="Instance control" /><span className={`status-tag ${labStatus === "ONLINE" ? "success" : labStatus === "STARTING" ? "amber" : "muted-tag"}`}><span className="status-dot" /> {labStatus}</span></div><div className="lab-body"><div className="target-visual"><div className="target-grid" /><div className="target-ring"><Target size={28} /><span /></div><div className="target-caption"><span>TARGET / CREATOR CONFIGURED</span><strong>LAB-INSTANCE-00<span>7</span></strong></div></div><div className="lab-details"><div><span>IP ADDRESS</span><strong className="mono">10.24.18.7</strong></div><div><span>PORTS</span><strong className="mono">22 · 80 · 443</strong></div><div><span>TIME REMAINING</span><strong className="mono amber-text">48:21</strong></div><div><span>CONNECTION</span><strong className="mono success-text">READY</strong></div></div></div><div className="lab-controls"><button className="primary-button" onClick={startLab}><Radio size={15} /> {labStatus === "ONLINE" ? "Restart instance" : "Start instance"}</button><button className="small-control" onClick={() => navToast("Reset instance")}><RotateCcw size={14} /> Reset</button><button className="small-control" onClick={() => navToast("Extend instance")}><Clock3 size={14} /> Extend</button><button className="icon-button" onClick={() => navToast("Lab settings")}><Settings2 size={16} /></button></div></section>
+
+      <section className="panel skill-panel" id="learn"><PanelTitle eyebrow="Skill tree / live map" title="Capability graph" action="Open full tree" /><div className="skill-map"><div className="skill-node mastered"><span>NETWORKING</span><strong>01</strong></div><div className="connector c1" /><div className="skill-node active-node"><span>WEB<br />FUNDAMENTALS</span><strong>02</strong></div><div className="connector c2" /><div className="skill-node locked"><LockKeyhole size={13} /><span>WEB<br />EXPLOITATION</span><strong>03</strong></div><div className="skill-node small-node"><span>LINUX</span><strong>04</strong></div><div className="skill-node small-node right"><span>DEFENSE</span><strong>05</strong></div></div><div className="skill-legend"><span><i className="legend-dot mastered-dot" /> Mastered</span><span><i className="legend-dot active-dot" /> Learning</span><span><i className="legend-dot locked-dot" /> Locked</span></div></section>
+
+      <section className="panel creator-panel" id="creator"><div className="creator-ornament"><Layers3 size={22} /></div><div className="eyebrow">Creator workspace</div><h2>Build the lab<br /><em>you imagined.</em></h2><p>Challenges, rooms, paths, flags, hints, and scoring rules belong to you. Configure content without touching source code.</p><div className="creator-actions"><button className="primary-button" onClick={() => { setIsCreator(!isCreator); toast(isCreator ? "Creator preview ditutup" : "Creator preview dibuka"); }}><Plus size={15} /> {isCreator ? "Close creator view" : "Open Creator Panel"}</button><button className="secondary-button" onClick={() => navToast("Creator documentation")}><CircleHelp size={15} /> How it works</button></div>{isCreator && <div className="creator-popover"><div><FilePlus2 size={15} /> New challenge</div><div><Database size={15} /> New learning path</div><div><Flag size={15} /> Configure flags</div><div><Trophy size={15} /> Scoring & achievements</div></div>}</section>
     </div>
-  );
+
+    <section className="lower-section"><div className="section-heading"><div><div className="eyebrow">Framework modules</div><h2>Everything has a place.</h2></div><button className="secondary-button" onClick={() => navToast("Open framework")}><MoreHorizontal size={15} /> Browse all modules</button></div><div className="module-grid">{[{icon: <Server />, title: "Machines", meta: "TARGET MANAGEMENT", color: "teal"}, {icon: <Terminal />, title: "Browser terminal", meta: "INTEGRATED TOOL", color: "amber"}, {icon: <Wifi />, title: "Investigation board", meta: "PERSONAL WORKSPACE", color: "coral"}, {icon: <Users />, title: "Competition", meta: "LIVE EVENTS", color: "teal"}].map((m) => <button className="module-card" key={m.title} onClick={() => navToast(m.title)}><div className={`module-icon ${m.color}`}>{m.icon}</div><div><strong>{m.title}</strong><span>{m.meta}</span></div><ChevronRight size={15} /></button>)}</div></section>
+    <footer className="workspace-footer"><span>RHZ LAB / SECURITY LEARNING OS</span><span>BUILD 0.8.4 <i /> ALL SYSTEMS NOMINAL</span></footer>
+  </div>;
 }
