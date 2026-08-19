@@ -8,12 +8,21 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
+import Operations from "./pages/Operations";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/404" component={NotFound} />
+      <Route path="/challenges" component={Operations} />
+      <Route path="/paths" component={Operations} />
+      <Route path="/labs" component={Operations} />
+      <Route path="/notes" component={Operations} />
+      <Route path="/leaderboard" component={Operations} />
+      <Route path="/terminal" component={Operations} />
+      <Route path="/settings" component={Operations} />
+      <Route path="/creator" component={Operations} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -49,19 +58,19 @@ export default function App() {
               <div className="side-section-label">Workspace</div>
               <nav className="side-nav" aria-label="Navigasi utama">
                 <a className="nav-item active" href="#dashboard"><span className="nav-glyph">⌁</span>Dashboard<span className="nav-ping" /></a>
-                <a className="nav-item" href="#learn"><span className="nav-glyph">◈</span>Learn</a>
-                <a className="nav-item" href="#challenges"><span className="nav-glyph">▣</span>Challenges<span className="nav-count">24</span></a>
-                <a className="nav-item" href="#labs"><span className="nav-glyph">◌</span>Labs</a>
-                <a className="nav-item" href="#machines"><span className="nav-glyph">▤</span>Machines</a>
-                <a className="nav-item" href="#academy"><span className="nav-glyph">△</span>Academy</a>
-                <a className="nav-item" href="#paths"><span className="nav-glyph">↗</span>Learning paths</a>
+                <a className="nav-item" href="/paths"><span className="nav-glyph">◈</span>Learn</a>
+                <a className="nav-item" href="/challenges"><span className="nav-glyph">▣</span>Challenges<span className="nav-count">24</span></a>
+                <a className="nav-item" href="/labs"><span className="nav-glyph">◌</span>Labs</a>
+                <a className="nav-item" href="/labs"><span className="nav-glyph">▤</span>Machines</a>
+                <a className="nav-item" href="/paths"><span className="nav-glyph">△</span>Academy</a>
+                <a className="nav-item" href="/paths"><span className="nav-glyph">↗</span>Learning paths</a>
               </nav>
               <div className="side-divider" />
               <div className="side-section-label">Personal tools</div>
               <nav className="side-nav">
-                <a className="nav-item" href="#terminal"><TerminalSquare size={15} />Terminal</a>
-                <a className="nav-item" href="#notes"><span className="nav-glyph">▤</span>Notes</a>
-                <a className="nav-item" href="#bookmarks"><span className="nav-glyph">⌑</span>Bookmarks</a>
+                <a className="nav-item" href="/terminal"><TerminalSquare size={15} />Terminal</a>
+                <a className="nav-item" href="/notes"><span className="nav-glyph">▤</span>Notes</a>
+                <a className="nav-item" href="/notes"><span className="nav-glyph">⌑</span>Bookmarks</a>
               </nav>
               <div className="sidebar-footer">
                 <div className="system-readout"><span className="live-dot" /> SYSTEM ONLINE <span className="mono">v0.8.4</span></div>
